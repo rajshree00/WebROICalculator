@@ -1,0 +1,137 @@
+/* Custom Styles */
+.header-strip {
+    width: 100%;
+    height: 20px; /* Adjusted height to make it more rectangular */
+    background-image: url('../icon/strip.png'); /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+}
+
+.title-container {
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px 0px;
+    width: 100%; /* Ensures container spans the full width */
+    margin-right: 0; /* Remove any right margin */
+    box-sizing: border-box; /* Ensures padding is inside the width */
+}
+.row {
+    margin: 0 !important;  /* Remove any margin from rows */
+}
+
+.col-6 {
+    padding: 0;  /* Remove padding from columns */
+}
+
+.logo {
+    max-width: 150px;
+    height: auto;
+}
+
+.body-container {
+    padding: 50px 0;
+}
+
+.footer-container {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    text-align: center;
+}
+
+/* Styling for Form Questions */
+form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+form .form-label {
+    font-weight: bold;
+}
+
+form .form-control, form .form-select {
+    padding: 10px;
+}
+
+/* Make sure Add + button does not stretch across */
+table .btn .btn-sm {
+    width: auto;  /* Prevent stretching */
+    padding: 5px 10px;  /* Adjust padding */
+    font-size: 14px;  /* Adjust font size to make the button smaller */
+}
+
+.table-group {
+    margin-bottom: 20px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+}
+
+.currency-symbol {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.project-name {
+    padding: 15px 0; /* Adjust as needed */
+    font-weight: bold;
+    color: #333; /* Adjust color if needed */
+}
+
+/* Remove right border from the last column */
+table tbody tr td:last-child {
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+}
+.wide-container {
+    max-width: 90% !important;
+    min-height: 700px;
+}
+
+.chart-container {
+    /* width: 100%; */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#chart-title-2, #chart-title-3{
+    background-color: rgb(166, 185, 185) !important;
+}
+.chart-title-container {
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+
+
+.chart-view {
+    min-height: 500px; /* Adjust height based on requirement */
+}
+.footer-strip {
+    width: 100%;
+    height: 20px; /* Adjust the height */
+    background-image: url('../icon/strip.png'); /* Your strip image URL */
+    background-size: cover;
+    background-position: center;
+}
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .logo {
+        max-width: 100px; /* Make logo smaller on mobile */
+    }
+
+    .body-container {
+        padding: 20px 0;
+    }
+}
