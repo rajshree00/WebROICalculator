@@ -298,7 +298,7 @@ function create_SiL_Trace(){
 
     // Extract the saved effort value (in hours) and convert it to a float
     const total_sil_usage = parseFloat(
-        sil_entry["Saved efforts with SiL factory to perform this task [hr]"]
+        sil_entry["Saved efforts with SiL factory[hr]"]
     );
 
     const lcl = parseFloat(table_info.tables["Standard Pricing"][1]["Rate"]); // Lower cost level
