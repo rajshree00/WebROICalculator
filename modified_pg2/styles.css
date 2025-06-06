@@ -1,0 +1,173 @@
+/* Custom Styles */
+.header-strip {
+    width: 100%;
+    height: 20px; /* Adjusted height to make it more rectangular */
+    background-image: url('../icon/strip.png'); /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+}
+
+.title-container {
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px 0px;
+    width: 100%; /* Ensures container spans the full width */
+    margin-right: 0; /* Remove any right margin */
+    box-sizing: border-box; /* Ensures padding is inside the width */
+}
+.row {
+    margin: 0 !important;  /* Remove any margin from rows */
+}
+
+.col-6 {
+    padding: 0;  /* Remove padding from columns */
+}
+
+.logo {
+    max-width: 150px;
+    height: auto;
+}
+
+.body-container {
+    padding: 50px 0;
+}
+
+.footer-container {
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    text-align: center;
+     bottom: 20px;
+    /* position:absolute; */
+    width: 100%; 
+}
+
+/* Styling for Form Questions */
+#survey-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#survey-form .mb-3 {
+    display: flex;
+    flex-direction: column;
+}
+
+#survey-form .form-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#survey-form .form-control {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#submit-btn {
+    padding: 12px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#submit-btn:hover {
+    background-color: #0056b3;
+}
+form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+form .form-label {
+    font-weight: bold;
+}
+
+form .form-control, form .form-select {
+    padding: 10px;
+}
+
+.light-placeholder {
+    color: gray;
+  }
+
+/* Make sure Add + button does not stretch across */
+table .btn .btn-sm {
+    width: auto;  /* Prevent stretching */
+    padding: 5px 10px;  /* Adjust padding */
+    font-size: 14px;  /* Adjust font size to make the button smaller */
+}
+
+.table-group {
+    margin-bottom: 20px;
+}
+.custom-delete-btn {
+/*background-color: #eeeded; /* Custom orange-red color */
+    color: white; /* Text color */
+    border: none; /* Remove default border */
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.custom-delete-btn:hover {
+    background-color: #df3812; /* Darker shade on hover */
+}
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+}
+
+.currency-symbol {
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.project-name {
+    padding: 15px 0; /* Adjust as needed */
+    font-weight: bold;
+    color: #333; /* Adjust color if needed */
+}
+
+/* Remove right border from the last column */
+/* table tbody tr td:last-child {
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+} */
+.footer-strip {
+    width: 100%;
+    height: 20px; /* Adjust the height */
+    background-image: url('../icon/strip.png'); /* Your strip image URL */
+    background-size: cover;
+    background-position: center;
+    /* margin-top: 20px; /* Optional: adds spacing between the footer and the strip */
+}
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .logo {
+        max-width: 100px; /* Make logo smaller on mobile */
+    }
+
+    .body-container {
+        padding: 20px 0;
+    }
+}
