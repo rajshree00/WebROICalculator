@@ -2,7 +2,7 @@
 .header-strip {
     width: 100%;
     height: 20px; /* Adjusted height to make it more rectangular */
-    background-image: url('../icon/strip.png'); /* Replace with your image URL */
+    background-image: url('icon/strip.png'); /* Replace with your image URL */
     background-size: cover;
     background-position: center;
 }
@@ -146,7 +146,7 @@ table .btn .btn-sm {
     width: 100%;
     height: 20px; /* Adjust the height */
     /* position:fixed; */
-    background-image: url('../icon/strip.png'); /* Your strip image URL */
+    background-image: url('icon/strip.png'); /* Your strip image URL */
     background-size: cover;
     background-position: center;
   

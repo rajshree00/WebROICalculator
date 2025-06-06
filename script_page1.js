@@ -22,7 +22,7 @@ const questions = [
         question: "Choose SIL type:*",
         type: "select",
         id: "question3",
-        options: [" ", "SiL from scratch (L)", "SiL for Successive pVer (M)", "SiL Series (S)"],
+        options: ["", "SiL from scratch (L)", "SiL for Successive pVer (M)", "SiL Series (S)"],
         error_msg: "Please select valid SiL Type"
     },
     {
