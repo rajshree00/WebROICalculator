@@ -7,10 +7,10 @@ let default_currency_Symbol = "€";
 
 let table_group = [
     "Standard Pricing", 
-    "Various Investment Products", "Test Automation Table",
-    "Maintenance Table",
-    "OEM Investment", 
-    "SiL factory Usage Information", 
+    "Various Investment SiL Products", "Effort for setting up Test Automation",
+    "Effort Required for Maintaining Subsequent Versions",
+    "OEM Investment for SiL", 
+    // "SiL factory Usage Information", 
     "CE Tests",
     "FnD Tests"
 ];
@@ -26,7 +26,7 @@ const tables = [
         ]
     },
     { 
-        name: "Various Investment Products", 
+        name: "Various Investment SiL Products", 
         hasTotal: false, 
         columns: [
             { type: "hour", saved_Id_key: "min_hours", column_title: "Min duration [Hrs]" },
@@ -35,34 +35,34 @@ const tables = [
             // }
         ]
     },
-    {   name: "Test Automation Table", 
+    {   name: "Effort for setting up Test Automation", 
         hasTotal: false, 
         columns: [
             { type: "hour", saved_Id_key: "min_hours", column_title: "Min duration [Hrs]" }
         ]
     },
     { 
-        name: "Maintenance Table", 
+        name: "Effort Required for Maintaining Subsequent Versions", 
         hasTotal: false, 
         columns: [
             { type: "hour", saved_Id_key: "hours", column_title: "Duration [Hrs]" }
         ]
     },
     { 
-        name: "OEM Investment", 
+        name: "OEM Investment for SiL", 
         hasTotal: true, 
         columns: [
             { type: "price", saved_Id_key: "price", column_title: "Price" }
         ]
     },
-    { 
-        name: "SiL factory Usage Information", 
-        hasTotal: false, 
-        columns: [
-            { type: "hour", saved_Id_key: "hours", column_title: "Saved efforts with SiL factory[hr]" },
-            // { type: "percentage", saved_Id_key: "percentage", column_title: "HCL Share [%]" }
-        ]
-    },
+    // { 
+    //     name: "SiL factory Usage Information", 
+    //     hasTotal: false, 
+    //     columns: [
+    //         { type: "hour", saved_Id_key: "hours", column_title: "Saved efforts with SiL factory[hr]" },
+    //         // { type: "percentage", saved_Id_key: "percentage", column_title: "HCL Share [%]" }
+    //     ]
+    // },
     { 
         name: "CE Tests", 
         hasTotal: true, 
@@ -91,7 +91,7 @@ let std_table_value = {
             {"title": 'LCL hr rate', "Rate": '31'},
             {"title": 'Cost of HiL lab per hour', "Rate": '20'}
         ],
-        "Various Investment Products":{
+        "Various Investment SiL Products":{
             "SiL from scratch (L)":[
                 {"title": 'vECU OL', "Min duration [Hrs]": '202', "Loop Type": "Open Loop"},
                 {"title": 'vNP creation (per channel)', "Min duration [Hrs]": '20', "Loop Type": "Open Loop"},
@@ -113,19 +113,20 @@ let std_table_value = {
                 {"title": 'Closed loop validation', "Min duration [Hrs]": '118',  "Loop Type": "Closed Loop"}
             ]
         },
-        "Test Automation Table":[
+        "Effort for setting up Test Automation":[
             {"title": '', "Min duration [Hrs]": '0'},
         ],
-        "Maintenance Table":[
-            {"title": 'Approx effort per PVER', "Duration [Hrs]": '48.4'}
+        "Effort Required for Maintaining Subsequent Versions":[
+            {"title": 'Approx effort per PVER', "Duration [Hrs]": '48.4'},
+            {"title": 'SiL factory Usage Information', "Duration [Hrs]": '50.4'}
         ],
-        "OEM Investment":[
+        "OEM Investment for SiL":[
             {"title": 'OEM one-time payment', "Price": '10000'},
-            {"title": 'OEM per delivery', "Price": '1500'}
+            {"title": 'OEM per SiL delivery', "Price": '1500'}
         ],
-        "SiL factory Usage Information":[
-            {"title": 'Total SiL Usage', "Saved efforts with SiL factory[hr]": '50.4'}
-        ],
+        // "SiL factory Usage Information":[
+        //     {"title": 'Total SiL Usage', "Saved efforts with SiL factory[hr]": '50.4'}
+        // ],
         "CE Tests":[
             {"title": 'ComVeh  RT', "Hours": '96'},
             {"title": 'ComDia RT', "Hours": '3'},
@@ -154,37 +155,37 @@ function create_table_groups() {
                 tableSamples[group] = [];
                 break;
 
-            case "Various Investment Products":
-                console.log("Handling Various Investment Products");
-                // Code to handle "Various Investment Products" group
+            case "Various Investment SiL Products":
+                console.log("Handling Various Investment SiL Products");
+                // Code to handle "Various Investment SiL Products" group
                 tableSamples[group] = [];
                 break;
             
-            case "Test Automation Table":
-                console.log("Handling Various Investment Products");
-                // Code to handle "Various Investment Products" group
+            case "Effort for setting up Test Automation":
+                console.log("Handling Various Investment SiL Products");
+                // Code to handle "Various Investment SiL Products" group
                 tableSamples[group] = [];
                 break;
 
-            case "Maintenance Table":
-                console.log("Handling Maintenance Table");
-                // Code to handle "Maintenance Table" group
+            case "Effort Required for Maintaining Subsequent Versions":
+                console.log("Handling Effort Required for Maintaining Subsequent Versions");
+                // Code to handle "Effort Required for Maintaining Subsequent Versions" group
                 tableSamples[group] = [];
                 break;
 
-            case "OEM Investment":
+            case "OEM Investment for SiL":
                 {if(questionnaire_response["question2"].toLowerCase()==="yes"){
                     console.log("Handling Return Table");
-                    // Code to handle "OEM Investment" group
+                    // Code to handle "OEM Investment for SiL" group
                     tableSamples[group] = [];
                 }
                 break;
             }
-            case "SiL factory Usage Information":
-                console.log("SiL factory Usage Information");
-                // Code to handle "SiL factory Usage Information" group
-                tableSamples[group] = [];
-                break;
+            // case "SiL factory Usage Information":
+            //     console.log("SiL factory Usage Information");
+            //     // Code to handle "SiL factory Usage Information" group
+            //     tableSamples[group] = [];
+            //     break;
 
             case "CE Tests":
                 console.log("Handling CE Tests");
@@ -226,8 +227,8 @@ function create_tablesample(){
                 break;
             }
             // Add more cases as needed for other keys
-            case "Various Investment Products": {
-                    // Append "XYZ" to the "Various Investment Products" array
+            case "Various Investment SiL Products": {
+                    // Append "XYZ" to the "Various Investment SiL Products" array
                     // tableSamples[key].push("vECU OL");
                     // tableSamples[key].push("vEL");
                     // tableSamples[key].push("vNP creation (per channel)");
@@ -254,7 +255,7 @@ function create_tablesample(){
                     break;
             }
 
-            case "Test Automation Table":{ 
+            case "Effort for setting up Test Automation":{ 
                 // tableSamples[key].push("Approx effort per PVER");
                 std_table_value["tables"][key].forEach(item => {  // Iterate each List Index
                     // Push Title of each Dictionary
@@ -263,7 +264,7 @@ function create_tablesample(){
                 break;
             }
 
-            case "Maintenance Table":{ 
+            case "Effort Required for Maintaining Subsequent Versions":{ 
                 // tableSamples[key].push("Approx effort per PVER");
                 std_table_value["tables"][key].forEach(item => {  // Iterate each List Index
                     // Push Title of each Dictionary
@@ -272,9 +273,9 @@ function create_tablesample(){
                 break;
             }
 
-            case "OEM Investment":{
+            case "OEM Investment for SiL":{
                     // tableSamples[key].push("OEM one-time payment");
-                    // tableSamples[key].push("OEM per delivery");
+                    // tableSamples[key].push("OEM per SiL delivery");
                     std_table_value["tables"][key].forEach(item => {  // Iterate each List Index
                         // Push Title of each Dictionary
                         tableSamples[key].push(item.title)
@@ -282,17 +283,17 @@ function create_tablesample(){
                     break;
             }
 
-            case "SiL factory Usage Information":{
-                // tableSamples[key].push("vXCU generation");
-                // tableSamples[key].push("vVEH artefact generation");
-                // tableSamples[key].push("vVEH Integration");
-                // tableSamples[key].push("vVEH testing");
-                std_table_value["tables"][key].forEach(item => {  // Iterate each List Index
-                    // Push Title of each Dictionary
-                    tableSamples[key].push(item.title)
-                });
-                break;
-            }
+            // case "SiL factory Usage Information":{
+            //     // tableSamples[key].push("vXCU generation");
+            //     // tableSamples[key].push("vVEH artefact generation");
+            //     // tableSamples[key].push("vVEH Integration");
+            //     // tableSamples[key].push("vVEH testing");
+            //     std_table_value["tables"][key].forEach(item => {  // Iterate each List Index
+            //         // Push Title of each Dictionary
+            //         tableSamples[key].push(item.title)
+            //     });
+            //     break;
+            // }
             case "CE Tests":{
                 // tableSamples[key].push("ComVeh  RT");
                 // tableSamples[key].push("ComDia RT");
@@ -337,7 +338,7 @@ function create_table() {
         console.log(`[out] table = ${table.name}`);
 
         const isNoToQuestion2 = questionnaire_response.question2.toLowerCase() === "no";
-        const isReturnTable = table.name === "OEM Investment";
+        const isReturnTable = table.name === "OEM Investment for SiL";
         
         if (isNoToQuestion2 && isReturnTable) {
             return;
@@ -359,7 +360,7 @@ function create_table() {
         groupTitle.style.fontWeight = "bold"; // Makes text bold
         headerContainer.appendChild(groupTitle);
 
-        if(!['Standard Pricing', 'Maintenance Table', 'OEM Investment', 'SiL factory Usage Information'].includes(table.name)){
+        if(!['Standard Pricing', 'Effort Required for Maintaining Subsequent Versions', 'OEM Investment for SiL', 'SiL factory Usage Information'].includes(table.name)){
             const addRowBtn = document.createElement("button");
             addRowBtn.classList.add("btn", "btn-sm", "btn-info");
             addRowBtn.textContent = "Add +";
@@ -476,7 +477,7 @@ function addRowContents(tableName, title = "")  {
         // add custom Attribute to recognized input field
         input.dataset.type = col.type;
 
-        if (tableName === "Various Investment Products") {
+        if (tableName === "Various Investment SiL Products") {
             const subTable = std_table_value.tables[tableName][questionnaire_response.question3];
             if (subTable) {
                 row_info = subTable.find(item => item.title === title);
@@ -627,7 +628,7 @@ function addRowContents(tableName, title = "")  {
     actionTd.style.textAlign = "center"; // Center align the delete button
     tbody.appendChild(newRow); // Add the new row to the table body
 
-    if(!['Standard Pricing', 'Maintenance Table', 'OEM Investment', 'SiL factory Usage Information'].includes(tableName)){
+    if(!['Standard Pricing', 'Effort Required for Maintaining Subsequent Versions', 'OEM Investment for SiL', 'SiL factory Usage Information'].includes(tableName)){
         const deleteBtn = document.createElement("button");
         deleteBtn.classList.add("custom-delete-btn"); 
         deleteBtn.innerHTML = ` <img src="../icon/Delete.png" alt="Delete" width="16" height="16">`; // Bootstrap trash icon
@@ -976,7 +977,7 @@ function saveTableData() {
 
     tables.forEach(table => {
         const isNoToQuestion2 = questionnaire_response.question2.toLowerCase() === "no";
-        const isReturnTable = table.name === "OEM Investment";
+        const isReturnTable = table.name === "OEM Investment for SiL";
         
         if (isNoToQuestion2 && isReturnTable) {
             return;
@@ -1213,7 +1214,7 @@ function addRowContents_withVal(tableName, title = "")  {
     const actionTd = document.createElement("td");
     actionTd.style.textAlign = "center"; // Center align the delete button
     tbody.appendChild(newRow); // Add the new row to the table body
-    if(!['Standard Pricing', 'Maintenance Table', 'OEM Investment', "SiL factory Usage Information"].includes(tableName)){
+    if(!['Standard Pricing', 'Effort Required for Maintaining Subsequent Versions', 'OEM Investment for SiL', "SiL factory Usage Information"].includes(tableName)){
         const deleteBtn = document.createElement("button");
         deleteBtn.classList.add("custom-delete-btn"); 
         deleteBtn.innerHTML = ` <img src="../icon/Delete.png" alt="Delete" width="16" height="16">`; // Bootstrap trash icon
@@ -1256,7 +1257,7 @@ function reload_table_info(){
             groupTitle.style.fontWeight = "bold"; // Makes text bold
             headerContainer.appendChild(groupTitle);
 
-            if(!['Standard Pricing', 'Maintenance Table', 'OEM Investment', 'SiL factory Usage Information'].includes(tableGroupName)){
+            if(!['Standard Pricing', 'Effort Required for Maintaining Subsequent Versions', 'OEM Investment for SiL', 'SiL factory Usage Information'].includes(tableGroupName)){
                 const addRowBtn = document.createElement("button");
                 addRowBtn.classList.add("btn", "btn-sm", "btn-info");
                 addRowBtn.textContent = "Add +";
