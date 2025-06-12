@@ -41,20 +41,25 @@
     </div>
 
     <!-- Currency Selector -->
-    <div class="container d-flex align-items-center justify-content-center gap-2 mb-4">
-        <label for="currency"><strong>Select Currency: </strong></label>
-        <select id="currency" class="form-select w-auto">
-            <option value="$" title="United States Dollar">USD ($)</option>
-            <option value="€" title="Euro">EUR (€)</option>
-            <option value="£" title="British Pound">GBP (£)</option>
-            <option value="₹" title="Indian Rupee">INR (₹)</option>
-            <option value="¥" title="Japanese Yen">JPY (¥)</option>
-            <option value="A$" title="Australian Dollar">AUD (A$)</option>
-            <option value="C$" title="Canadian Dollar">CAD (C$)</option>
-            <option value="¥" title="Chinese Yuan">CNY (¥)</option>
-            <option value="MX$" title="Mexican Peso">MXN (MX$)</option>
-            <option value="R$" title="Brazilian Real">BRL (R$)</option>
-        </select>
+    <div class="container d-flex align-items-center justify-content-start gap-2 mb-4">
+        <div class="col-6 d-flex justify-content-start align-items-center pe-5 py-3">
+            <label for="currency"><strong>Select Currency:  </strong></label>
+            <select id="currency" class="form-select w-auto">
+                <option value="$" title="United States Dollar">USD ($)</option>
+                <option value="€" title="Euro">EUR (€)</option>
+                <option value="£" title="British Pound">GBP (£)</option>
+                <option value="₹" title="Indian Rupee">INR (₹)</option>
+                <option value="¥" title="Japanese Yen">JPY (¥)</option>
+                <option value="A$" title="Australian Dollar">AUD (A$)</option>
+                <option value="C$" title="Canadian Dollar">CAD (C$)</option>
+                <option value="¥" title="Chinese Yuan">CNY (¥)</option>
+                <option value="MX$" title="Mexican Peso">MXN (MX$)</option>
+                <option value="R$" title="Brazilian Real">BRL (R$)</option>
+            </select>
+        </div>
+        <div class="col-6 d-flex justify-content-end align-items-center pe-5 py-3">
+            <button class="btn btn-primary btn-lg px-5 py-2 ms-3 mt-2" id="export_investment_details">Export</button>
+        </div>
     </div>  
 
     <!-- Body Section -->

@@ -1715,12 +1715,151 @@ function getStdTableInfo() {
     console.log("uploaded_table_info: ", data);
     return data;
 }
+
+function process_export_data(){
+    var export_info = {
+        "app_id": "SIL ROI Calculator",
+        "version": "2.0.0"        
+    };
+    var meta_data = {
+        "metadata":{
+            "created_by" : "",
+            // "generated_at": "2025-05-30T13:00:00Z"
+            "generated_at": new Date().toISOString(),   // current timestamp in ISO format
+        }
+    };
+
+    var project_name= {};
+    // create entry for project name
+    if (questionnaire_response && questionnaire_response.project_name) {
+        project_name = {"project name" : questionnaire_response.project_name};// Update project name
+    }
+
+    // Update currency value
+    const new_table_value = JSON.parse(JSON.stringify(std_table_value));
+    new_table_value.currency = document.getElementById("currency").value;
+
+    // Loop through each table name and its data array
+    Object.entries(new_table_value.tables).forEach(([tableName, tableRows]) => {
+        // Check if the answer to question2 is "no"
+        const isNoToQuestion2 = questionnaire_response.question2.toLowerCase() === "no";
+
+        // Check if the current table is the "OEM Investment for SiL" table
+        const isReturnTable = tableName === "OEM Investment for SiL";
+
+        // Skip this table if both conditions are true
+        if (isNoToQuestion2 && isReturnTable) {
+            return;
+        }
+
+        // Get the table body element by ID
+        const tbody = document.getElementById(`${tableName}-tbody`);
+        const rows = tbody.getElementsByTagName("tr");
+
+        const tableData = [];
+
+        // remove all existing tableRows
+        if(tableName === "Various Investment SiL Products"){
+            new_table_value.tables[tableName][questionnaire_response.question3] = [];
+        }else{
+            new_table_value.tables[tableName] = [];
+        }
+        
+
+        for (let row of rows) {
+            // TODO: Extract data from each row and push to tableData
+            const titleInput = row.cells[0].querySelector("input"); // First column (Title)
+            if (!titleInput || titleInput.value.trim() === "") {
+                continue; // Skip if title is empty
+            }
+
+            const rowData = { title: titleInput.value.trim() };
+
+            // add des to database
+            const desc = titleInput.title && titleInput.title.trim() !== "" ? titleInput.title : null;
+
+            const table = tables.find(item => item.name === tableName);
+
+            table.columns.forEach((col, index) => {
+                const input = row.cells[index + 1].querySelector("input"); // Adjust for title column
+                if (input) {
+                    rowData[col.column_title] = input.value.trim();
+                }
+                const select_input = row.cells[index + 1].querySelector("select"); // Adjust for title column
+                if (select_input) {
+                    rowData[col.column_title] = select_input.value.trim();
+                }
+            });
+
+            if (desc){
+                rowData.description = desc;
+            }
+
+            if(tableName === "Various Investment SiL Products"){
+                rowData["Loop Type"] = questionnaire_response.question4;
+                new_table_value.tables[tableName][questionnaire_response.question3].push(rowData);
+            }
+            else{
+                new_table_value.tables[tableName].push(rowData);
+            }
+            
+        }
+    });
+
+    // recheck the entries and filter out the empty tables
+    Object.entries(new_table_value.tables).forEach(([tableName, tableRows]) => {
+        if (tableRows.length === 0){
+            const rowData = { title: "" };
+            const table = tables.find(item => item.name === tableName);
+            table.columns.forEach((col, index) => {
+                if(["hour", "price", "percentage"].includes(col.type) ){
+                    rowData[col.column_title] = '0';
+                }
+                else{
+                    rowData[col.column_title] = "";
+                }
+            });
+            if(tableName === "Various Investment SiL Products"){
+                rowData["Loop Type"] = questionnaire_response.question4;
+                new_table_value.tables[tableName][questionnaire_response.question3].push(rowData);
+            }
+            else{
+                new_table_value.tables[tableName].push(rowData);
+            }
+        }
+    });
+    console.log("Exported Std Table Info : ", new_table_value);
+    // convert the existing dict info
+    // const myDictionary = export_info | project_name | new_table_value;
+    const myDictionary = {
+        ...export_info,
+        ...project_name,
+        ...{"table_info": new_table_value},
+        ...meta_data
+    };
+
+    console.log("Exported myDictionary : ", myDictionary);
+    const dataStr = JSON.stringify(myDictionary, null, 2); // Pretty print
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "data.json";
+    a.click();
+
+    URL.revokeObjectURL(url); // Clean up
+}
+
 window.onload = () => {
     let status = localStorage.getItem('page_status');
     console.log(`page_status=${status}`);
-    window.hasReloaded = false;
 
     get_questionnaire_response(); 
+
+    // Update button handler
+    const export_investment_info = document.getElementById("export_investment_details");
+    export_investment_info.onclick = process_export_data;
 
     // fetch status of page 1
     console.log("Page status value in main:", getPageStatus());
