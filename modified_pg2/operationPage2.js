@@ -83,32 +83,51 @@ const tables = [
     }
 ];
 
+const std_TA_product = [
+    {title: "FT-value", description:"Functional Test"},
+    {title: "FT-OT", description:""},
+    {title: "OST", description:"OBD Scantool Test (OST): Validates the ECU/vECU for all the OBD services (as per SAE J1979/ISO 15031 standards)"},
+    {title: "OPT", description:"OBD PID Test (OPT)"},
+    {title: "SysQT", description:"System Qualification Test"},
+    {title: "BFT", description:"Base Function Test"},
+    {title: "COM Test", description:"Testing COM configuration of ECU project"},
+    {title: "IO Test", description:""},
+    {title: "MemBase", description:""},
+    {title: "MemCycle", description: `* Stimulates the needed cycles in different needed use cases.
+    e.g. "WLTC cycles", "target speed operation cycles", "waittime operation cycles".
+* Analyzes the storage behavior for unintended OS task-based continuous writing.
+* Calculates the Lifetime Prediction of the FEE area (Flash EEPROM Emulation)`
+    },
+    {title: "Customer Specific Test", description:"CST"},
+    {title: "SwQT", description:""},
+    {title: "Elementary Test", description:"The Elementary test is a smoke test to assess the runnability of an embedded software before proceeding with any further"}
+];
 let std_table_value = {
     "currency": "€",
     "tables": {
         "Standard Pricing" : [
-            {"title": 'HCL hr rate', "Rate": '124'},
-            {"title": 'LCL hr rate', "Rate": '31'},
+            {"title": 'HCL hr rate', "Rate": '124', description:"High Cost Location"},
+            {"title": 'LCL hr rate', "Rate": '31', description: 'Low Cost Location'},
             {"title": 'Cost of HiL lab per hour', "Rate": '20'}
         ],
         "Various Investment SiL Products":{
             "SiL from scratch (L)":[
-                {"title": 'vECU OL', "Min duration [Hrs]": '202', "Loop Type": "Open Loop"},
-                {"title": 'vNP creation (per channel)', "Min duration [Hrs]": '20', "Loop Type": "Open Loop"},
-                {"title": 'vEL', "Min duration [Hrs]": '40', "Loop Type": "Closed Loop"},
+                {"title": 'vECU OL', "Min duration [Hrs]": '202', "Loop Type": "Open Loop", description: "virtual Electronic Control Unit"},
+                {"title": 'vNP creation (per channel)', "Min duration [Hrs]": '20', "Loop Type": "Open Loop", description: '* vXCU contains always vNP.\n* no difference between vNP basic and advanced for effort estimation.'},
+                {"title": 'vEL', "Min duration [Hrs]": '40', "Loop Type": "Closed Loop", description: "virtual Electric Layer"},
                 {"title": 'vMDL [HiL 2 SiL]', "Min duration [Hrs]": '36', "Loop Type": "Closed Loop"},
                 {"title": 'Closed loop validation', "Min duration [Hrs]": '487',  "Loop Type": "Closed Loop"}
             ],
             "SiL for Successive pVer (M)":[
-                {"title": 'vECU OL', "Min duration [Hrs]": '115', "Loop Type": "Open Loop"},
-                {"title": 'vNP creation (per channel)', "Min duration [Hrs]": '20', "Loop Type": "Open Loop"},
-                {"title": 'vEL', "Min duration [Hrs]": '20', "Loop Type": "Closed Loop"},
+                {"title": 'vECU OL', "Min duration [Hrs]": '115', "Loop Type": "Open Loop", description: "virtual Electronic Control Unit"},
+                {"title": 'vNP creation (per channel)', "Min duration [Hrs]": '20', "Loop Type": "Open Loop", description: '* vXCU contains always vNP.\n* no difference between vNP basic and advanced for effort estimation.'},
+                {"title": 'vEL', "Min duration [Hrs]": '20', "Loop Type": "Closed Loop", description: "virtual Electric Layer"},
                 {"title": 'vMDL [HiL 2 SiL]', "Min duration [Hrs]": '12', "Loop Type": "Closed Loop"},
                 {"title": 'Closed loop validation', "Min duration [Hrs]": '226',  "Loop Type": "Closed Loop"}],
-            "SiL Series (S)":[
-                {"title": 'vECU OL', "Min duration [Hrs]": '75', "Loop Type": "Open Loop"},
-                {"title": 'vNP creation (per channel)', "Min duration [Hrs]": '0', "Loop Type": "Open Loop"},
-                {"title": 'vEL', "Min duration [Hrs]": '10', "Loop Type": "Closed Loop"},
+            "SiL For successive series pVers (S)":[
+                {"title": 'vECU OL', "Min duration [Hrs]": '75', "Loop Type": "Open Loop", description: "virtual Electronic Control Unit"},
+                {"title": 'vNP creation (per channel)', "Min duration [Hrs]": '0', "Loop Type": "Open Loop", description: '* vXCU contains always vNP.\n* no difference between vNP basic and advanced for effort estimation.'},
+                {"title": 'vEL', "Min duration [Hrs]": '10', "Loop Type": "Closed Loop", description: "virtual Electric Layer"},
                 {"title": 'vMDL [HiL 2 SiL]', "Min duration [Hrs]": '10', "Loop Type": "Closed Loop"},
                 {"title": 'Closed loop validation', "Min duration [Hrs]": '118',  "Loop Type": "Closed Loop"}
             ]
@@ -428,6 +447,41 @@ function create_table() {
     });
 }
 
+function getDescriptionByTitle(tableName, title){
+    const entries = std_table_value.tables[tableName];
+    let entry = {}
+
+    if(tableName === "Various Investment SiL Products"){
+        entry = entries[questionnaire_response.question3].find(item => item.title === title)
+    }
+    else{
+        entry = entries.find(item => item.title === title)
+    }
+
+    if (entry && "description" in entry && entry.description.trim() !== ""){
+        return entry.description;
+    }
+
+    return "";
+}
+
+function getDescriptionByTitle_refill(tableName, title){
+    const entries = table_info.tables[tableName];
+    let entry = {}
+
+    if(tableName === "Various Investment SiL Products"){
+        entry = entries[questionnaire_response.question3].find(item => item.title === title)
+    }
+    else{
+        entry = entries.find(item => item.title === title)
+    }
+
+    if (entry && "description" in entry && entry.description.trim() !== ""){
+        return entry.description;
+    }
+
+    return "";
+}
 // Function to add a new row with predefined contents (e.g., sample data)
 function addRowContents(tableName, title = "")  {
     const table = tables.find(t => t.name === tableName);
@@ -439,15 +493,48 @@ function addRowContents(tableName, title = "")  {
     const titleInput = document.createElement("input");
     titleInput.type = "text";
     titleInput.classList.add("form-control");
-    titleInput.value = title;
+    // titleInput.value = title;
+
+    const desc = getDescriptionByTitle(tableName, title);
+
+    if (desc && desc.trim() != ""){
+        titleInput.title = desc;
+    }
+    titleTd.appendChild(titleInput);
     if(title){
+        titleInput.value = title;
         titleInput.readOnly = true;
     }
     else{
         titleInput.placeholder = "Type the title here...";
+        if(tableName === "Effort for setting up Test Automation"){
+                const new_options = std_TA_product.map(product => product.title).sort((a, b) => a.localeCompare(b));
+                const awesomplete = new Awesomplete(titleInput, {
+                    list: new_options,
+                    minChars: 0,
+                    autoFirst: true,
+                    filter: Awesomplete.FILTER_CONTAINS,
+                    sort: false,
+                    maxItems: 999
+                });
+
+                // Show all options when input is focused
+                titleInput.addEventListener("focus", () => {
+                    awesomplete.evaluate();
+                });
+
+            titleInput.addEventListener("awesomplete-selectcomplete", () => {
+                const value = titleInput.value.trim();
+                const TA_element = std_TA_product.find(item => item.title === value);
+                if (TA_element && TA_element.description) {
+                    titleInput.title = TA_element.description;
+                } else {
+                    titleInput.removeAttribute("title");
+                }
+            });
+        }
     }
     
-    titleTd.appendChild(titleInput);
     newRow.appendChild(titleTd);
     if (!table_inputs[tableName]){
         table_inputs[tableName]=[];
@@ -731,6 +818,191 @@ function removeNumbers(e, input) {
 }
 
 // Function to add a new row to the selected table
+function addRow_(tableName) {
+    const table = tables.find(t => t.name === tableName);
+    const tbody = document.getElementById(`${tableName}-tbody`);
+    const newRow = document.createElement("tr");
+
+    // Title input field
+    const titleTd = document.createElement("td");
+    const titleInput = document.createElement("input");
+    titleInput.type = "text";
+    titleInput.classList.add("form-control");
+    titleInput.placeholder = "Type the title here..."
+    titleTd.appendChild(titleInput);
+    newRow.appendChild(titleTd);
+    if (!table_inputs[tableName]){
+        table_inputs[tableName]=[];
+    }
+
+    table.columns.forEach(col => {
+        const td = document.createElement("td");
+        const input = document.createElement("input");
+        input.type = "text";
+        input.step = col.type === "hour" ? "0.5" : col.type === "price" ? "0.01" : "0.1";
+        input.value = 0;
+        input.classList.add("form-control");
+        input.style.minWidth = "80px"; // Prevents input box from being too small
+        input.style.flex = "1"; // Allows resizing while keeping symbol aligned
+        const currencySelect = document.getElementById("currency");
+        const selectedCurrency = currencySelect.options[currencySelect.selectedIndex].title;
+        input.title = col.type === "hour"
+            ? "Enter time in hours (e.g., 1.5 for 1 hour 30 minutes)"
+            : col.type === "price"
+            ? `Enter price in ${selectedCurrency} (e.g., 199.99)`
+            : col.type === "percentage"
+            ? "Enter percentage value (e.g., 12.5 for 12.5%)"
+            : "";
+
+        // add custom Attribute to recognized input field
+        input.dataset.type = col.type;
+
+        // Special handling for "price" type column (currency symbol)
+        if (col.type === "price") {
+            td.style.display = "flex"; 
+            td.style.alignItems = "center";
+            td.style.gap = "5px"; // Ensures small space between input and currency symbol
+
+            const span = document.createElement("span");
+            span.className = "currency-symbol";
+            span.textContent = document.getElementById("currency").value;
+            span.style.marginLeft = "5px"; // Small gap between input and currency
+            
+            document.getElementById("currency").addEventListener("change", (e) => {
+                document.querySelectorAll(".currency-symbol").forEach(el => {
+                    el.textContent = e.target.value;
+                });
+            });
+            
+            td.appendChild(input);
+            td.appendChild(span);
+            table_inputs[tableName].push(input);
+            
+        }
+        else if (col.type === "select") {
+            td.style.display = "flex";
+            td.style.alignItems = "center";
+            td.style.gap = "5px";
+        
+            const select = document.createElement('select');
+            select.setAttribute('class', "form-select");
+            select.setAttribute('id', "ol_cl_select");
+            select.setAttribute('name', "ol_cl_select");
+
+             // Create placeholder option
+             const placeholderOption = document.createElement("option");
+             placeholderOption.textContent = "Select an option";
+             placeholderOption.value = "";
+             placeholderOption.disabled = true;
+             placeholderOption.selected = true;
+             placeholderOption.classList.add("light-placeholder"); 
+             select.appendChild(placeholderOption);
+ 
+             // for each on options: iterate each element to embed in selection widget
+             
+             for (const [value, label] of Object.entries(col.options)) {
+                 const option = document.createElement('option');
+                 // option.value = value;
+                 // option.title = label;
+                 // option.textContent = label;
+                 option.setAttribute('value', value);
+                 option.setAttribute('title', label);
+                 option.textContent = label;
+                 select.appendChild(option);
+             }
+             select.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                event.preventDefault();
+                const inputs = table_inputs[tableName];
+                    const currentIndex = inputs.indexOf(event.target);
+                    if (currentIndex > -1 && currentIndex < inputs.length - 1) {
+                            inputs[currentIndex + 1].focus();
+                    }
+                }
+            });
+             td.appendChild(select);    
+             table_inputs[tableName].push(select);  
+        }
+        else{
+            td.appendChild(input);
+            table_inputs[tableName].push(input);
+        }
+
+        // input.addEventListener("wheel", (e) => handleScroll(e, input));
+        // Inside the forEach loop where inputs are created
+        input.addEventListener("input", () => removeLeadingZeros(input));
+        
+        input.addEventListener("blur", () => {
+            let value = input.value.trim();
+            console.log(`type=${typeof value}`);
+        
+            // 1. If empty, set to "0.00"
+            if (value === "") {
+                input.value = "0.00";
+                return;
+            }
+            
+            // 2. If not a valid number, skip
+            if (isNaN(value)) {
+                return;
+            }
+        
+            // 3. If ends with '.', remove the dot
+            if (value.endsWith('.')) {
+                value = value.slice(0, -1);
+            }
+        
+            // 4. Parse float and normalize it
+            let num = parseFloat(value);
+        
+            // 5. Format: Remove trailing .00 or .0 or keep up to 2 decimals
+            if (Number.isInteger(num)) {
+                input.value = num.toString();  // No decimals
+            } else {
+                // Keep up to 2 decimals, remove unnecessary zeros
+                input.value = parseFloat(num.toFixed(2)).toString();
+            }
+        });
+
+        input.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+            event.preventDefault();
+            const inputs = table_inputs[tableName];
+                const currentIndex = inputs.indexOf(event.target);
+                if (currentIndex > -1 && currentIndex < inputs.length - 1) {
+                        inputs[currentIndex + 1].focus();
+                }
+            }
+        });
+ 
+
+        newRow.appendChild(td);
+    });
+
+    // Append new row to the table body
+    const actionTd = document.createElement("td");
+    actionTd.style.textAlign = "center"; // Center align the delete button
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.classList.add("custom-delete-btn"); 
+    deleteBtn.innerHTML = ` <img src="../icon/Delete.png" alt="Delete" width="16" height="16">`; // Bootstrap trash icon
+    deleteBtn.title = "Delete Row";
+
+    // Delete Row Functionality
+    deleteBtn.addEventListener("click", () => {
+        newRow.remove();
+    });
+
+    actionTd.appendChild(deleteBtn);
+    newRow.style.borderBottom = '2px solid #bbb';
+    newRow.appendChild(actionTd); // Append delete button at the end of the row
+    Array.from(newRow.children).forEach(td => {
+        td.style.border = 'none'; // Remove all borders from <td> elements
+    });
+    // Append new row to tbody
+    tbody.appendChild(newRow);
+}
+
 function addRow(tableName) {
     const table = tables.find(t => t.name === tableName);
     const tbody = document.getElementById(`${tableName}-tbody`);
@@ -743,6 +1015,45 @@ function addRow(tableName) {
     titleInput.classList.add("form-control");
     titleInput.placeholder = "Type the title here..."
     titleTd.appendChild(titleInput);
+
+    // const desc = getDescriptionByTitle(tableName, title);
+
+    // if (desc && desc.trim() != ""){
+    //     titleInput.title = desc;
+    // }
+
+    // const options = [
+    //   "Option 1", "Option 2", "Option 3", "Option 4", "Option 5",
+    //   "Option 6", "Option 7", "Option 8", "Option 9", "Option 10",
+    //   "Option 11", "Option 12", "Option 13", "Option 14", "Option 15",
+    //   "Option 16", "Option 17", "Option 18", "Option 19", "Option 20"
+    // ];
+    const options = std_TA_product
+        .map(product => product.title)
+        .sort((a, b) => a.localeCompare(b));
+    const awesomplete = new Awesomplete(titleInput, {
+      list: options,
+      minChars: 0,
+      autoFirst: true,
+      filter: Awesomplete.FILTER_CONTAINS,
+      sort: false,
+      maxItems: 999
+    });
+
+    // Show all options when input is focused
+    titleInput.addEventListener("focus", () => {
+      awesomplete.evaluate();
+    });
+
+    titleInput.addEventListener("awesomplete-selectcomplete", () => {
+      const value = titleInput.value.trim();
+      const TA_element = std_TA_product.find(item => item.title === value);
+      if (TA_element && TA_element.description) {
+        titleInput.title = TA_element.description;
+      } else {
+        titleInput.removeAttribute("title");
+      }
+    });
     newRow.appendChild(titleTd);
     if (!table_inputs[tableName]){
         table_inputs[tableName]=[];
@@ -994,6 +1305,9 @@ function saveTableData() {
 
             const rowData = { title: titleInput.value.trim() };
 
+            // add des to database
+            const desc = titleInput.title && titleInput.title.trim() !== "" ? titleInput.title : null;
+
             table.columns.forEach((col, index) => {
                 const input = row.cells[index + 1].querySelector("input"); // Adjust for title column
                 if (input) {
@@ -1004,6 +1318,10 @@ function saveTableData() {
                     rowData[col.column_title] = select_input.value.trim();
                 }
             });
+
+            if (desc){
+                rowData.description = desc;
+            }
 
             tableData.push(rowData);
         }
@@ -1054,6 +1372,13 @@ function addRowContents_withVal(tableName, title = "")  {
     titleInput.value = title;
     titleInput.readOnly = true;
     titleTd.appendChild(titleInput);
+
+    const desc = getDescriptionByTitle_refill(tableName, title);
+
+    if (desc && desc.trim() != ""){
+        titleInput.title = desc;
+    }
+
     newRow.appendChild(titleTd);
     if (!table_inputs[tableName]){
         table_inputs[tableName]=[];

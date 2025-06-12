@@ -40,7 +40,21 @@
     /* position:absolute; */
     width: 100%; 
 }
+/* Scrollable dropdown */
 
+    #autocomplete {
+        width: 100%; /* or set a fixed width like 500px */
+    }
+
+    .awesomplete {
+        width: 100% !important; /* Ensures dropdown matches input width */
+    }
+
+    .awesomplete > ul {
+      max-height: 200px;
+      width: 100%;
+      overflow-y: auto;
+    }
 /* Styling for Form Questions */
 #survey-form {
     display: flex;
