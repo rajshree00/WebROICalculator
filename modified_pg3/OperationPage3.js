@@ -126,8 +126,8 @@ function get_table_info(){
     table_info = JSON.parse(localStorage.getItem("tableData"));
     console.log("table info of page 3: ", table_info)
 
-    // Accessing "Various Investment Products" from the saved data
-    const variousInvestmentProducts = table_info.tables["Various Investment Products"];
+    // Accessing "Various Investment SiL Products" from the saved data
+    const variousInvestmentProducts = table_info.tables["Various Investment SiL Products"];
 
     variousInvestmentProducts.forEach(item => {
         // Convert string to float
@@ -291,14 +291,14 @@ function create_SiL_Trace(){
     
     // init SIL Factory variables
     let Sil_factory_data=[];
-    // Find the entry in the "SiL factory Usage Information" table where the title is "Total SiL Usage"
-    const sil_entry = table_info.tables["SiL factory Usage Information"].find(
-        item => item.title === "Total SiL Usage"
+    // Find the entry in the "Effort Required for Maintaining Subsequent Versions" table where the title is "Saved efforts with SiL factory"
+    const sil_entry = table_info.tables["Effort Required for Maintaining Subsequent Versions"].find(
+        item => item.title === "Saved efforts with SiL factory"
     );
 
     // Extract the saved effort value (in hours) and convert it to a float
     const total_sil_usage = parseFloat(
-        sil_entry["Saved efforts with SiL factory[hr]"]
+        sil_entry["Duration [Hrs]"]
     );
 
     const lcl = parseFloat(table_info.tables["Standard Pricing"][1]["Rate"]); // Lower cost level
@@ -312,7 +312,7 @@ function create_SiL_Trace(){
         return data;
     }
 
-    // Generate a dataset for the bar chart using the total SiL usage value
+    // Generate a dataset for the bar chart using the Saved efforts with SiL factory value
     Sil_factory_data = create_green_bar_dataset((total_sil_usage * lcl));
     console.log(`SiL Factory Data = ${Sil_factory_data}`);
 
@@ -333,7 +333,6 @@ function create_SiL_Trace(){
     return SIL_Factory_trace;
 }
 
-
 // Collect line chart data for invested product
 function create_investment_trace(key, hcl, lcl, Cost_ofHIL) {
     // Initialize an empty array to store investment data points for the chart
@@ -349,21 +348,27 @@ function create_investment_trace(key, hcl, lcl, Cost_ofHIL) {
     // Variable to store previously calculated savings, used for comparison or accumulation
     let previous_savings = 0;
 
-    // Extract the effort hours from the "Maintenance Table" (assumes only one row is relevant)
-    const appX_effort_hrs = parseFloat(table_info.tables["Maintenance Table"][0]["Duration [Hrs]"]);
+    // Extract the effort hours from the "Effort Required for Maintaining Subsequent Versions" (assumes only one row is relevant)
+    const approx_effort = table_info.tables["Effort Required for Maintaining Subsequent Versions"].find(item => item.title === 'Approx effort per PVER');
+    const appX_effort_hrs = parseFloat(approx_effort["Duration [Hrs]"]);
 
     // Calculate the estimated effort cost using the lower cost level (LCL)
     const effort_cost_est = parseFloat((lcl * appX_effort_hrs).toFixed(2));
 
-    // Initialize OEM investment values
+    // Initialize OEM Investment for SiL values
     let one_time_payment = 0;     // One-time payment to OEM
     let oem_per_delivery = 0;     // Recurring cost per delivery to OEM
 
     // Check if the user answered "yes" to question 2 in the questionnaire
     if (questionnaire_response.question2.toLowerCase() === "yes") {
-        // If yes, extract OEM investment values from the table
-        one_time_payment = parseFloat(table_info.tables["OEM Investment"][0]["Price"]);
-        oem_per_delivery = parseFloat(table_info.tables["OEM Investment"][1]["Price"]);
+        // If yes, extract OEM Investment for SiL values from the table
+        var otp_element = table_info.tables["OEM Investment for SiL"].find(item => item.title ==="OEM one-time payment");
+        one_time_payment = parseFloat(otp_element["Price"]);
+        // one_time_payment = parseFloat(table_info.tables["OEM Investment for SiL"][0]["Price"]);
+
+        var opd_element = table_info.tables["OEM Investment for SiL"].find(item => item.title ==="OEM per SiL delivery");
+        oem_per_delivery = parseFloat(opd_element["Price"]);
+        // oem_per_delivery = parseFloat(table_info.tables["OEM Investment for SiL"][1]["Price"]);
     }
 
     // Helper function to generate a dataset of 50 values, each a multiple of the input value
@@ -378,8 +383,8 @@ function create_investment_trace(key, hcl, lcl, Cost_ofHIL) {
     // Initialize an empty array to store combined investment-related data
     let investment_information = [];
 
-    // Loop through each row in the "Various Investment Products" table
-    table_info.tables["Various Investment Products"].forEach(row => {
+    // Loop through each row in the "Various Investment SiL Products" table
+    table_info.tables["Various Investment SiL Products"].forEach(row => {
         if (row) {
             // Add non-null rows to the investment_information array
             investment_information.push(row);
@@ -387,7 +392,7 @@ function create_investment_trace(key, hcl, lcl, Cost_ofHIL) {
     });
 
     // Loop through each row in the "FnD Tests" table
-    table_info.tables["Test Automation Table"].forEach(row => {
+    table_info.tables["Effort for setting up Test Automation"].forEach(row => {
         if (row) {
             // Add non-null rows to the investment_information array
             investment_information.push(row);
@@ -395,7 +400,7 @@ function create_investment_trace(key, hcl, lcl, Cost_ofHIL) {
     });
 
     console.log("investment Information list :", investment_information);    
-    // Get the total number of rows combined from both "Various Investment Products" and "FnD Tests"
+    // Get the total number of rows combined from both "Various Investment SiL Products" and "FnD Tests"
     const table_length = investment_information.length;
     console.log("investment Information list length :", table_length);
 
