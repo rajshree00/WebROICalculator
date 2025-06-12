@@ -137,7 +137,7 @@ let std_table_value = {
         ],
         "Effort Required for Maintaining Subsequent Versions":[
             {"title": 'Approx effort per PVER', "Duration [Hrs]": '48.4'},
-            {"title": 'SiL factory Usage Information', "Duration [Hrs]": '50.4'}
+            {"title": 'Saved efforts with SiL factory', "Duration [Hrs]": '50.4'}
         ],
         "OEM Investment for SiL":[
             {"title": 'OEM one-time payment', "Price": '10000'},
@@ -470,7 +470,7 @@ function getDescriptionByTitle_refill(tableName, title){
     let entry = {}
 
     if(tableName === "Various Investment SiL Products"){
-        entry = entries[questionnaire_response.question3].find(item => item.title === title)
+        entry = entries.find(item => item.title === title)
     }
     else{
         entry = entries.find(item => item.title === title)
@@ -1016,44 +1016,36 @@ function addRow(tableName) {
     titleInput.placeholder = "Type the title here..."
     titleTd.appendChild(titleInput);
 
-    // const desc = getDescriptionByTitle(tableName, title);
+    if(!(["FnD Tests", "CE Tests"].includes(tableName))){
+        const options = std_TA_product
+            .map(product => product.title)
+            .sort((a, b) => a.localeCompare(b));
 
-    // if (desc && desc.trim() != ""){
-    //     titleInput.title = desc;
-    // }
+        const awesomplete = new Awesomplete(titleInput, {
+            list: options,
+            minChars: 0,
+            autoFirst: true,
+            filter: Awesomplete.FILTER_CONTAINS,
+            sort: false,
+            maxItems: 999
+        });
 
-    // const options = [
-    //   "Option 1", "Option 2", "Option 3", "Option 4", "Option 5",
-    //   "Option 6", "Option 7", "Option 8", "Option 9", "Option 10",
-    //   "Option 11", "Option 12", "Option 13", "Option 14", "Option 15",
-    //   "Option 16", "Option 17", "Option 18", "Option 19", "Option 20"
-    // ];
-    const options = std_TA_product
-        .map(product => product.title)
-        .sort((a, b) => a.localeCompare(b));
-    const awesomplete = new Awesomplete(titleInput, {
-      list: options,
-      minChars: 0,
-      autoFirst: true,
-      filter: Awesomplete.FILTER_CONTAINS,
-      sort: false,
-      maxItems: 999
-    });
+        // Show all options when input is focused
+        titleInput.addEventListener("focus", () => {
+            awesomplete.evaluate();
+        });
 
-    // Show all options when input is focused
-    titleInput.addEventListener("focus", () => {
-      awesomplete.evaluate();
-    });
+        titleInput.addEventListener("awesomplete-selectcomplete", () => {
+            const value = titleInput.value.trim();
+            const TA_element = std_TA_product.find(item => item.title === value);
+            if (TA_element && TA_element.description) {
+                titleInput.title = TA_element.description;
+            } else {
+                titleInput.removeAttribute("title");
+            }
+        });
+    }
 
-    titleInput.addEventListener("awesomplete-selectcomplete", () => {
-      const value = titleInput.value.trim();
-      const TA_element = std_TA_product.find(item => item.title === value);
-      if (TA_element && TA_element.description) {
-        titleInput.title = TA_element.description;
-      } else {
-        titleInput.removeAttribute("title");
-      }
-    });
     newRow.appendChild(titleTd);
     if (!table_inputs[tableName]){
         table_inputs[tableName]=[];
@@ -1338,8 +1330,10 @@ function saveTableData() {
     localStorage.setItem("tableData", JSON.stringify(savedData));
     console.log("Table data saved:", savedData);
 
+    update_reload_status(false);  // set a flag so it won’t reload again
     // Redirect to Page 4 after saving
     window.location.href = "../modified_pg3/page3.html";
+    
 }
 
 function updateProjectName(newName) {
@@ -1371,14 +1365,18 @@ function addRowContents_withVal(tableName, title = "")  {
     titleInput.classList.add("form-control");
     titleInput.value = title;
     titleInput.readOnly = true;
-    titleTd.appendChild(titleInput);
+    
 
-    const desc = getDescriptionByTitle_refill(tableName, title);
+    var desc = "";
+    if (table_row_data.description){
+        desc = table_row_data.description;
+    }
 
     if (desc && desc.trim() != ""){
         titleInput.title = desc;
     }
 
+    titleTd.appendChild(titleInput);
     newRow.appendChild(titleTd);
     if (!table_inputs[tableName]){
         table_inputs[tableName]=[];
@@ -1673,6 +1671,19 @@ function update_page_status(page_name){
     localStorage.setItem('page_status',page_name);
 }
 
+function update_reload_status(status){
+    localStorage.setItem('reloaded',status);
+    console.log("Set Reloaded Status: ", status," [", typeof status, "]");
+}
+
+function getReloadedStatus() {
+    const status = localStorage.getItem('reloaded');
+    console.log("Fetched Reloaded Status:", status," [", typeof status, "]");
+    const boolValue = (status === 'true');  // true if string is "true", else false
+    // return status ? status : null;
+    return boolValue;
+}
+
 // Retrieves the current value of 'page_status' from localStorage
 function getPageStatus() {
     const data = JSON.parse(localStorage.getItem("status"));
@@ -1707,6 +1718,7 @@ function getStdTableInfo() {
 window.onload = () => {
     let status = localStorage.getItem('page_status');
     console.log(`page_status=${status}`);
+    window.hasReloaded = false;
 
     get_questionnaire_response(); 
 
@@ -1722,6 +1734,12 @@ window.onload = () => {
     if (status === "page_3")
     {
         reload_tables();
+        // Reload the current page (like pressing the browser refresh button)
+        var reloaded_status = getReloadedStatus();
+        if (!reloaded_status) {
+            update_reload_status(true);
+            window.location.reload();
+        }
     }
     else{
         // get_questionnaire_response();
