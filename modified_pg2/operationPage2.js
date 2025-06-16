@@ -1838,6 +1838,26 @@ function process_export_data(){
         ...meta_data
     };
 
+    // create file name    
+    const now = new Date();
+
+    // Format timestamp as ddmmyyhhmmss
+    const pad = (n) => n.toString().padStart(2, '0');
+    const timestamp = 
+    pad(now.getDate()) +
+    pad(now.getMonth() + 1) + // Months are 0-indexed
+    now.getFullYear().toString().slice(-2) +
+    pad(now.getHours()) +
+    pad(now.getMinutes()) +
+    pad(now.getSeconds());
+
+    // Sanitize project name: replace spaces with underscores
+    var project_name = questionnaire_response.project_name;
+    const safeProjectName = project_name.replace(/\s+/g, '_');
+
+    const filename = `${safeProjectName}_${timestamp}.json`;
+
+
     console.log("Exported myDictionary : ", myDictionary);
     const dataStr = JSON.stringify(myDictionary, null, 2); // Pretty print
     const blob = new Blob([dataStr], { type: "application/json" });
@@ -1845,7 +1865,7 @@ function process_export_data(){
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "data.json";
+    a.download = filename;
     a.click();
 
     URL.revokeObjectURL(url); // Clean up
